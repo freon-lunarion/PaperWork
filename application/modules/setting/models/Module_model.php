@@ -72,6 +72,7 @@ class Module_model extends CI_Model{
   {
     $this->db->select('code as module_code');
     $this->db->select('title as module_title');
+
     return $this->db->get('module')->result();
   }
 

@@ -151,6 +151,12 @@ class Role_model extends CI_Model{
 
   public function remove($id=0)
   {
+    $this->db->where('role_id', $id);
+    $this->db->delete('user_role_area');
+
+    $this->db->where('role_id', $id);
+    $this->db->delete('role_module');
+
     $this->db->where('id', $id);
     $this->db->delete('role');
     return TRUE;
