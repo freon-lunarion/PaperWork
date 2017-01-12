@@ -162,15 +162,14 @@ class Permission_model extends CI_Model{
     $this->db->where('role_id', $role_id);
 
     if ($this->db->get()->row()->val) {
-      return false;
-    } else {
       return true;
+    } else {
+      return false;
     }
   }
 
   public function add($module_code='',$role_id='',$self_read=1,$self_write=1,$group_read=1,$group_write=0,$sub_read=0,$sub_write=0)
   {
-    if ($this->isAvailable($module_code,$role_id)) {
       $data = array(
         'module_code' => $module_code ,
         'role_id'     => $role_id ,
@@ -184,9 +183,7 @@ class Permission_model extends CI_Model{
 
       $this->db->insert('role_module', $data);
       return $this->db->insert_id();
-    } else {
-      $this->change($module_code,$role_id,$self_read,$self_write,$group_read,$group_write,$sub_read,$sub_write);
-    }
+
   }
 
   public function edit($module_code='',$role_id='',$self_read=1,$self_write=1,$group_read=1,$group_write=0,$sub_read=0,$sub_write=0)

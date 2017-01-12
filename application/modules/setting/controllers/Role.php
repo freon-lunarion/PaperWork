@@ -154,15 +154,15 @@ class Role extends CI_Controller{
         // group : for data on same group/area
         // sub   : for data on sub group/area
 
-        $self  = decbin($this->input->post('slc_self_'.$module_code));
-        $group = decbin($this->input->post('slc_group_'.$module_code));
-        $sub   = decbin($this->input->post('slc_sub_'.$module_code));
+        $self  = decbin($this->input->post('slc_self_'.$row->module_code));
+        $group = decbin($this->input->post('slc_group_'.$row->module_code));
+        $sub   = decbin($this->input->post('slc_sub_'.$row->module_code));
 
         $this->permission_model->add(
           $row->module_code,$role_id,
-          substr($self,1,1),substr($self,0,1),
-          substr($group,1,1),substr($group,0,1),
-          substr($sub,1,1),substr($sub,0,1)
+          substr($self,0,1),substr($self,1,1),
+          substr($group,0,1),substr($group,1,1),
+          substr($sub,0,1),substr($sub,1,1)
         );
       }
 
@@ -200,32 +200,33 @@ class Role extends CI_Controller{
         // self  : for self-own data
         // group : for data on same group/area
         // sub   : for data on sub group/area
-        $self  = decbin($this->input->post('slc_self_'.$module_code));
-        $group = decbin($this->input->post('slc_group_'.$module_code));
-        $sub   = decbin($this->input->post('slc_sub_'.$module_code));
+        $self  = decbin($this->input->post('slc_self_'.$row->module_code));
+        $group = decbin($this->input->post('slc_group_'.$row->module_code));
+        $sub   = decbin($this->input->post('slc_sub_'.$row->module_code));
 
         // check on role_module table
         if ($this->permission_model->isAvailable($row->module_code,$id)) {
-
           $this->permission_model->edit(
             $row->module_code,$id,
-            substr($self,1,1),substr($self,0,1),
-            substr($group,1,1),substr($group,0,1),
-            substr($sub,1,1),substr($sub,0,1)
+            substr($self,0,1),substr($self,1,1),
+            substr($group,0,1),substr($group,1,1),
+            substr($sub,0,1),substr($sub,1,1)
           );
+          $respond = array('status'=>'OK','msg' => 'Edit');
+
         } else {
           $this->permission_model->add(
             $row->module_code,$id,
-            substr($self,1,1),substr($self,0,1),
-            substr($group,1,1),substr($group,0,1),
-            substr($sub,1,1),substr($sub,0,1)
+            substr($self,0,1),substr($self,1,1),
+            substr($group,0,1),substr($group,1,1),
+            substr($sub,0,1),substr($sub,1,1)
           );
+          $respond = array('status'=>'OK','msg' => 'Tambah');
 
         }
 
       }
 
-      $respond = array('status'=>'OK','msg' => '');
     }
     echo json_encode($respond);
   }
