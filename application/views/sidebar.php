@@ -18,10 +18,12 @@
   </ul>
   <h4>Setting</h4>
   <ul class="nav nav-sidebar">
-    <li><a href="">Area</a></li>
-    <li><a href="">Module</a></li>
-    <li><a href="">Role</a></li>
-    <li><a href="">User Management</a></li>
+    <li><?php echo anchor('setting/area','Area'); ?></li>
+    <li><?php echo anchor('setting/module','Module'); ?></li>
+    <li><?php echo anchor('setting/role','Role'); ?></li>
+    <li><?php echo anchor('user_management','User Management'); ?></li>
+    <li><?php echo anchor('user_management/access','User Access'); ?></li>
+
   </ul>
 
 </div>
