@@ -21,6 +21,7 @@
     <li><?php echo anchor('setting/area','Area'); ?></li>
     <li><?php echo anchor('setting/module','Module'); ?></li>
     <li><?php echo anchor('setting/role','Role'); ?></li>
+    <li><?php echo anchor('setting/phase','Phase'); ?></li>
     <li><?php echo anchor('user_management','User Management'); ?></li>
     <li><?php echo anchor('user_management/access','User Access'); ?></li>
 
