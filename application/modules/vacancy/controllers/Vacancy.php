@@ -42,12 +42,14 @@ class Vacancy extends CI_Controller{
 
   public function formAdd()
   {
-
+    $this->load->view('form_add', $data);
   }
 
   public function formEdit()
   {
     $id = $this->input->post('id');
+
+    $this->load->view('form_edit', $data);
 
   }
 
