@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class JobLevel_model extends CI_Model{
-  var $table = 'job_level';
+class JobType_model extends CI_Model{
+  var $table = 'job_type';
   var $column_select = array('id','title');
 
   var $column_order = array('id', 'title'); //set column field database for datatable orderable
