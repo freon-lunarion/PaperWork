@@ -42,13 +42,81 @@ class Vacancy extends CI_Controller{
 
   public function formAdd()
   {
+    $this->load->model(array('master_model'));
+    $this->load->helper(array('form'));
+    $ls = $this->master_model->getArea();
+    $optArea = array('' => '');
+    foreach ($ls as $row) {
+      $optArea[$row->id] = $row->title;
+    }
+
+    $ls = $this->master_model->getJobType();
+    $optJobType = array('' => '');
+    foreach ($ls as $row) {
+      $optJobType[$row->id] = $row->title;
+    }
+
+    $ls = $this->master_model->getJobLevel();
+    $optJobLevel = array('' => '');
+    foreach ($ls as $row) {
+      $optJobLevel[$row->id] = $row->title;
+    }
+
+    $ls = $this->master_model->getJobFunction();
+    $optJobFunc = array('' => '');
+    foreach ($ls as $row) {
+      $optJobFunc[$row->id] = $row->title;
+    }
+
+    $phase = $this->master_model->getPhase();
+
+    $data =array(
+      'optJobType'  => $optJobType,
+      'optJobLevel' => $optJobLevel,
+      'optJobFunc'  => $optJobFunc,
+      'optArea'     => $optArea,
+      'phase'       => $phase,
+      'id'          => 0,
+    );
     $this->load->view('form_add', $data);
   }
 
   public function formEdit()
   {
-    $id = $this->input->post('id');
+    $this->load->model(array('master_model'));
+    $this->load->helper(array('form'));
 
+    $ls = $this->master_model->getArea();
+    $optArea = array('' => '');
+    foreach ($ls as $row) {
+      $optArea[$row->id] = $row->title;
+    }
+
+    $ls = $this->master_model->getJobType();
+    $optJobType = array('' => '');
+    foreach ($ls as $row) {
+      $optJobType[$row->id] = $row->title;
+    }
+
+    $ls = $this->master_model->getJobLevel();
+    $optJobLevel = array('' => '');
+    foreach ($ls as $row) {
+      $optJobLevel[$row->id] = $row->title;
+    }
+
+    $ls = $this->master_model->getJobFunction();
+    $optJobFunc = array('' => '');
+    foreach ($ls as $row) {
+      $optJobFunc[$row->id] = $row->title;
+    }
+
+    $data =array(
+      'optJobType'  => $optJobType,
+      'optJobLevel' => $optJobLevel,
+      'optJobFunc'  => $optJobFunc,
+      'optArea'     => $optArea,
+      'id'          => $id,
+    );
     $this->load->view('form_edit', $data);
 
   }

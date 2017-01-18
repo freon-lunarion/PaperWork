@@ -1,8 +1,8 @@
 <div class="col-sm-3 col-md-2 sidebar">
   <h4>Vacancy</h4>
   <ul class="nav nav-sidebar">
-    <li><a href="">List</a></li>
-    <li><a href="">Create New</a></li>
+    <li><?php echo anchor('vacancy','List'); ?></li>
+    <li><?php echo anchor('vacancy/formAdd','Create New'); ?></li>
   </ul>
   <h4>Candidate</h4>
   <ul class="nav nav-sidebar">

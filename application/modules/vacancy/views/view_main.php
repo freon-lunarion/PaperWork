@@ -49,7 +49,8 @@
         </div>
 
         <div class="col-xs-1 col-md-6 col-lg-6 ">
-          <button class="btn btn-default pull-right"><i class="fa fa-plus"></i></button>
+          <?php echo anchor('vacancy/formAdd','<i class="fa fa-plus"></i>' ,'class="btn btn-default pull-right"')?>
+
 
         </div>
       </div>
