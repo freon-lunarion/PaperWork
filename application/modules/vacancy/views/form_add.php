@@ -1,5 +1,6 @@
 <?php
   $this->load->view('template/top');
+  echo link_tag('vendor/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.min.css');
   $this->load->view('template/nav_bar');
 ?>
 <div class="container-fluid">
@@ -7,7 +8,7 @@
     <?php $this->load->view('sidebar');?>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
       <h1 class="page-header">Vacancy <small>Add</small></h1>
-
+      <?php echo form_open('vacancy/processAdd','','class="form"')?>
       <div class="row">
         <div class="col-sm-4">
           <div class="form-group">
@@ -74,11 +75,10 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="">Close Date</label>
+            <!-- <input type="text" class="datepicker"/> -->
             <?php echo form_date('dt_close',''); ?>
           </div>
         </div>
-
-
       </div>
 
 
@@ -86,22 +86,18 @@
       <div class="form-group">
         <label for="">Description</label>
         <?php echo form_textarea('txt_desc',''); ?>
-
       </div>
 
       <div class="form-group">
         <label for="">Requirement</label>
         <p class="help-block">Optional</p>
         <?php echo form_textarea('txt_req',''); ?>
-
-
       </div>
 
       <div class="form-group">
         <label for="">Benefit</label>
         <p class="help-block">Optional</p>
         <?php echo form_textarea('txt_benefit',''); ?>
-
       </div>
       <hr />
       <h2>Phase</h2>
@@ -124,12 +120,14 @@
             </td>
           </tr >
           <?php
+            $count = 2;
             foreach ($phase as $row) {
               echo '<tr>';
               echo '<td>'.$row->title.'</td>';
-              echo '<td>'.form_checkbox('chk_phase',$row->code).'</td>';
-              echo '<td>'.form_number('nm_order','','min=2 max=98').'</td>';
+              echo '<td>'.form_checkbox('chk_phase[]',$row->code,'','class="chk_phase" id="chk_phase_'.$row->code.'"').'</td>';
+              echo '<td>'.form_number('nm_order_'.$row->code,$count,'min=2 max=98 class="form-control nm_order" data-code="'.$row->code.'"').'</td>';
               echo '</tr>';
+              $count++;
             }
 
           ?>
@@ -141,16 +139,13 @@
               <input type="checkbox" value="" checked="checked" disabled>
             </td>
             <td>
-              End (99)
+              End (<?php echo $count; ?>)
             </td>
           </tr>
 
 
         </tbody>
       </table>
-
-      <hr />
-      
       <hr />
 
       <div class="row" >
@@ -163,6 +158,7 @@
 
         </div>
       </div>
+      <?php echo form_close()?>
 
     </div>
   </div>
@@ -171,3 +167,21 @@
 <?php
   echo $this->load->view('template/bot');
 ?>
+
+<script type='text/javascript' src="<?php echo base_url(); ?>vendor/handlebars/handlebars.runtime.min.js"></script>
+<script type='text/javascript' src="<?php echo base_url(); ?>vendor/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.all.min.js"></script>
+
+<script>
+  $('textarea').wysihtml5();
+  $('.nm_order').change(function(event) {
+    /* Act on the event */
+    var val = $(this).val();
+    var code = $(this).data('code');
+    if (val > 1 ) {
+      $('#chk_phase_'+code).attr('checked', 'checked');
+    } else {
+      $('#chk_phase_'+code).removeAttr('checked');
+
+    }
+  });
+</script>

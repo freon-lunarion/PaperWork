@@ -7,39 +7,63 @@
     <?php $this->load->view('sidebar');?>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
       <h1 class="page-header">Vacancy <small></small></h1>
-
-      <div class="row" style="margin-bottom:10px">
-        <div class="col-xs-6 col-sm-6 col-lg-3">
-          <input type="date" class="form-control" placeholder="" value="2010-01-01">
+      <style>
+        .form-inline{
+          margin-bottom: 10px;
+        }
+        .form-inline>.form-group{
+          margin-right: 1em;
+        }
+        .form-inline>.form-group>label{
+          margin-right: 0.25em;
+        }
+        .panel-title>a {
+          margin-left: 10px;
+        }
+      </style>
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="">Start</label>
+          <?php echo form_date('dt_start',date('Y-m-d'));?>
         </div>
-        <div class="col-xs-6 col-sm-6 col-lg-3">
-          <input type="date" class="form-control" placeholder="" value="9999-12-31">
+        <div class="form-group">
+          <label for="">End</label>
+          <?php echo form_date('dt_end',date('Y-m-d'));?>
         </div>
-        <div class="col-sm-12 col-lg-4">
+        <div class="form-group">
+          <label for="">Status</label>
+          <select class="form-control" id="slc_status" name="slc_status">
+            <option value="all">All</option>
+            <option value="publish">Publish</option>
+            <option value="unpublish">Unpublish</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="">Keyword</label>
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search for title or code">
+            <input type="text" name="txt_keyword" id="txt_keyword" class="form-control" placeholder="Search for title or code">
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+              <button class="btn btn-default" id="btn-search" type="button" title="search"><i class="fa fa-search"></i></button>
             </span>
           </div><!-- /input-group -->
-
         </div>
-      </div>
+
+      </form>
       <div class="row" >
-        <div class="col-xs-11 col-md-6 col-lg-6">
+        <div class="col-xs-11 col-md-6 col-lg-6 area-page">
           <nav aria-label="Page navigation">
             <ul class="pagination" style="margin-top:0px;margin-bottom:0px;">
-              <li>
+              <li class="page-prev">
                 <a href="#" aria-label="Previous">
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
-              <li class="active"><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li>
+              <li class="page-num active"><a href="#">1</a></li>
+              <li class="page-num"><a href="#">2</a></li>
+              <li class="page-num"><a href="#">3</a></li>
+              <li class="page-num"><a href="#">4</a></li>
+              <li class="page-num"><a href="#">5</a></li>
+              <li class="page-next">
                 <a href="#" aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>
                 </a>
@@ -49,80 +73,29 @@
         </div>
 
         <div class="col-xs-1 col-md-6 col-lg-6 ">
-          <?php echo anchor('vacancy/formAdd','<i class="fa fa-plus"></i>' ,'class="btn btn-default pull-right"')?>
-
-
-        </div>
-      </div>
-
-      <?php for ($i=0; $i < 10 ; $i++) { ?>
-      <div class="row">
-        <div class="col-xs-12 ">
-          <div class="panel panel-success">
-            <div class="panel-heading">
-              <h3 class="panel-title">
-                Job Title
-                <a class="btn-edit pull-right"><i class="fa fa-pencil"></i></a>
-
-              </h3>
-            </div>
-            <div class="panel-body" style="padding:0px">
-              <ul class="nav nav-pills nav-justified thumbnail" style="margin-bottom:0px">
-                <li><a href="#">
-                  <h4 class="list-group-item-heading">CV Screen</h4>
-                  <p class="list-group-item-text">99 Candidate(s)</p>
-                </a></li>
-                <li ><a href="#">
-                  <h4 class="list-group-item-heading">Process 1</h4>
-                  <p class="list-group-item-text">99 Candidate(s)</p>
-                </a></li>
-                <li ><a href="#">
-                  <h4 class="list-group-item-heading">Process 2</h4>
-                  <p class="list-group-item-text">99 Candidate(s)</p>
-                </a></li>
-                <li ><a href="#">
-                  <h4 class="list-group-item-heading">Process 3</h4>
-                  <p class="list-group-item-text">99 Candidate(s)</p>
-                </a></li>
-                <li ><a href="#">
-                  <h4 class="list-group-item-heading">Process 4</h4>
-                  <p class="list-group-item-text">99 Candidate(s)</p>
-                </a></li>
-                <li><a href="#">
-                  <h4 class="list-group-item-heading">Sign Contract</h4>
-                  <p class="list-group-item-text">99 Candidate(s)</p>
-                </a></li>
-                <li><a href="#">
-                  <h4 class="list-group-item-heading">Hired/ Rejected</h4>
-                  <p class="list-group-item-text">99/99 Candidate(s)</p>
-                </a></li>
-              </ul>
-            </div>
-            <!-- <div class="panel-footer">
-
-            </div> -->
-          </div>
-
+          <?php echo anchor('vacancy/formAdd','Add' ,'class="btn btn-default pull-right"')?>
 
         </div>
       </div>
-      <?php } ?>
+
+      <div id="area-list"></div>
+
 
       <div class="row" >
-        <div class="col-xs-11 col-md-6 col-lg-6 ">
+        <div class="col-xs-11 col-md-6 col-lg-6 area-page">
           <nav aria-label="Page navigation">
             <ul class="pagination" style="margin-top:0px;margin-bottom:0px;">
-              <li>
+              <li class="page-prev">
                 <a href="#" aria-label="Previous">
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
-              <li class="active"><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li>
+              <li class="page-num active"><a href="#">1</a></li>
+              <li class="page-num"><a href="#">2</a></li>
+              <li class="page-num"><a href="#">3</a></li>
+              <li class="page-num"><a href="#">4</a></li>
+              <li class="page-num"><a href="#">5</a></li>
+              <li class="page-next">
                 <a href="#" aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>
                 </a>
@@ -144,14 +117,47 @@
   echo $this->load->view('template/bot');
 ?>
 <script>
-  function getList() {
+  function getPage(page) {
     $.ajax({
-      url: baseUrl+'vacancy/vacancy/jsonList',
+      url: baseUrl+'vacancy/vacancy/showPage',
       type: 'POST',
-      dataType: 'jsonList',
-      data: {param1: 'value1'}
+      dataType: 'html',
+      data: {
+        keyword: $('#txt_keyword').val(),
+        status: $('#slc_status').val(),
+        start: $('#dt_start').val(),
+        end: $('#dt_end').val(),
+        page:page,
+      }
     })
     .done(function(respond) {
+      $('.area-page').html(respond);
+      console.log("success");
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+  }
+
+  function getList(page) {
+    $.ajax({
+      url: baseUrl+'vacancy/vacancy/showList',
+      type: 'POST',
+      dataType: 'html',
+      data: {
+        keyword: $('#txt_keyword').val(),
+        status: $('#slc_status').val(),
+        start: $('#dt_start').val(),
+        end: $('#dt_end').val(),
+        page:page,
+      }
+    })
+    .done(function(respond) {
+      $('#area-list').html(respond);
+
       console.log("success");
     })
     .fail(function() {
@@ -162,4 +168,66 @@
     });
 
   }
+  getList(1);
+  getPage(1);
+
+  $('.pagination>li.page-num>a').click(function(event) {
+    /* Act on the event */
+
+    $('.pagination>li.page-num').attr('class', 'page-num');
+    $(this).parent().attr('class', 'page-num active');
+  });
+
+  $('.pagination>li.page-next>a').click(function(event) {
+    /* Act on the event */
+    page = $('.pagination>li.active>a').html();
+
+  });
+
+  $('#btn-search').click(function(event) {
+    /* Act on the event */
+    getList(1);
+    getPage(1);
+  });
+</script>
+<script>
+  $('#area-list').on('click', '.btn-publish', function(event) {
+    event.preventDefault();
+    page = $('.pagination>li.active>a').html();
+
+    swal({
+      title: "Are you sure?",
+      text: "Do you want to Publish this vacancy",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      showLoaderOnConfirm: true,
+      closeOnConfirm: false,
+      closeOnCancel: true
+    },
+    function(isConfirm){
+      if (isConfirm) {
+        $.ajax({
+          url: $(this).attr('href'),
+          type: 'POST',
+          dataType: 'json',
+          data: {id: id}
+        })
+        .done(function(respond) {
+          swal("Success", "Vacancy Published", "success");
+          getList(page);
+        })
+        .fail(function() {
+
+        })
+        .always(function() {
+
+        });
+      } else {
+
+      }
+    });
+  });
 </script>

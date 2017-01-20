@@ -7,7 +7,7 @@ class Applicant_model extends CI_Model{
   {
     $this->db->select('count(a.id) as val');
     $this->db->where('a.id NOT IN (SELECT in vacancy_id  FROM application_phase)');
-    $this->db->where('a.vacancy_id', $vacancy_id)
+    $this->db->where('a.vacancy_id', $vacancy_id);
     $count1 = $this->db->get('application a')->row()->val;
 
     $this->db->select('count(a.id) as val');

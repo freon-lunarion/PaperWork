@@ -70,13 +70,22 @@ if ( ! function_exists('form_input'))
 	 */
 	function form_input($data = '', $value = '', $extra = '')
 	{
-		$defaults = array(
-			'type'  => 'text',
-			'name'  => is_array($data) ? '' : $data,
-      'id'    => is_array($data) ? '' : $data,
-      'class' => 'form-control',
-			'value' => $value
-		);
+		if (strpos($extra,'class')) {
+			$defaults = array(
+				'type'  => 'text',
+				'name'  => is_array($data) ? '' : $data,
+				'id'    => is_array($data) ? '' : $data,
+				'value' => $value
+			);
+		} else {
+			$defaults = array(
+				'type'  => 'text',
+				'name'  => is_array($data) ? '' : $data,
+				'id'    => is_array($data) ? '' : $data,
+				'class' => 'form-control',
+				'value' => $value
+			);
+		}
 
 		return '<input '._parse_form_attributes($data, $defaults)._attributes_to_string($extra)." />\n";
 	}
@@ -116,9 +125,22 @@ if ( ! function_exists('form_date'))
 	 */
 	function form_date($data = '', $value = '', $extra = '')
 	{
-		is_array($data) OR $data = array('name' => $data ,'id' => $data);
-		$data['type'] = 'date';
-		return form_input($data, $value, $extra);
+		$CI =& get_instance();
+		$CI->load->library('user_agent'); // load library
+
+		if ( $CI->agent->is_mobile()) {
+			is_array($data) OR $data = array('name' => $data ,'id' => $data);
+			$data['type']  = 'date';
+			return form_input($data, $value, $extra);
+		} else {
+			is_array($data) OR $data = array('name' => $data ,'id' => $data);
+			$data['type']  = 'text';
+			$return = "<div class='input-group datepicker'>";
+      $return .= form_input($data, $value, $extra);
+			$return .= '<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span></div>';
+			return $return;
+
+		}
 	}
 }
 
@@ -173,7 +195,10 @@ if ( ! function_exists('form_dropdown'))
 		}
 		else
 		{
-			$defaults = array('name' => $data, 'id' => $data, 'class'=> 'form-control');
+			$defaults = array('name' => $data, 'id' => $data);
+			if(strpos($extra,'class') == FALSE) {
+				$defaults['class'] = 'form-control';
+			}
 		}
 
 		is_array($selected) OR $selected = array($selected);
@@ -247,13 +272,23 @@ if ( ! function_exists('form_textarea'))
 	 */
 	function form_textarea($data = '', $value = '', $extra = '')
 	{
+
 		$defaults = array(
       'name'  => is_array($data) ? '' : $data,
       'id'    => is_array($data) ? '' : $data,
-			'class' => 'form-control',
-			'cols'  => '40',
-			'rows'  => '5'
 		);
+
+		if (strpos($extra,'class') == FALSE) {
+			$defaults['class'] = 'form-control';
+		}
+
+		if (strpos($extra,'cols') == FALSE) {
+			$defaults['cols'] = '40';
+		}
+
+		if (strpos($extra,'rows') == FALSE) {
+			$defaults['rows'] = '5';
+		}
 
 		if ( ! is_array($data) OR ! isset($data['value']))
 		{

@@ -2,7 +2,7 @@
   <h4>Vacancy</h4>
   <ul class="nav nav-sidebar">
     <li><?php echo anchor('vacancy','List'); ?></li>
-    <li><?php echo anchor('vacancy/formAdd','Create New'); ?></li>
+    <li><?php echo anchor('vacancy/formAdd','Add New'); ?></li>
   </ul>
   <h4>Candidate</h4>
   <ul class="nav nav-sidebar">

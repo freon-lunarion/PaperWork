@@ -3,12 +3,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Vacancy_model extends CI_Model{
 
-  private function _getQuery($start='1990-01-01 00:00:00', $end='9999-12-31 23:59:59', $keyword='',$limit=10,$offset=0)
+  private function _getQuery($start='1990-01-01 00:00:00', $end='9999-12-31 23:59:59', $keyword='',$status=NULL,$limit=10,$offset=0)
   {
     $this->db->select('id as vacancy_id');
     $this->db->select('short_text as vacancy_code');
     $this->db->select('long_text as vacancy_title');
     $this->db->select('is_visible');
+    $this->db->select('qty');
+    $this->db->select('close_date');
     if ($keyword != '') {
       $this->db->group_start();
       $this->db->like('long_text', $keyword);
@@ -16,8 +18,11 @@ class Vacancy_model extends CI_Model{
       $this->db->group_end();
     }
 
-    $this->db->group_start();
+    if (is_null($status) == FALSE) {
+      $this->db->where('is_visible', $status);
+    }
 
+    $this->db->group_start();
     $this->db->group_start();
     $this->db->where('open_date >=', $start);
     $this->db->where('close_date <=', $end);
@@ -46,9 +51,10 @@ class Vacancy_model extends CI_Model{
     $this->db->order_by('short_text');
   }
 
-  public function getList($start='1990-01-01 00:00:00', $end='9999-12-31 23:59:59', $keyword='',$limit=10,$offset=0)
+  public function getList($start='1990-01-01 00:00:00', $end='9999-12-31 23:59:59', $keyword='',$status = NULL,$limit=10,$offset=0)
   {
-    $query = $this->_getQuery($start,$end,$keyword,$limit,$offset)->get();
+    $this->_getQuery($start,$end,$keyword,$status,$limit,$offset);
+    $query = $this->db->get();
     return $query->result();
   }
 
@@ -60,10 +66,46 @@ class Vacancy_model extends CI_Model{
 
   }
 
-  public function countFiltered($start='1990-01-01 00:00:00', $end='9999-12-31 23:59:59', $keyword='',$limit=10,$offset=0)
+  public function countFiltered($start='1990-01-01 00:00:00', $end='9999-12-31 23:59:59', $keyword='',$status=NULL)
   {
-    $query = $this->_getQuery($start,$end,$keyword,$limit,$offset)->get();
-    return $query->num_rows();
+    $this->db->select('count(id) as val');
+
+    if ($keyword != '') {
+      $this->db->group_start();
+      $this->db->like('long_text', $keyword);
+      $this->db->or_like('short_text', $keyword);
+      $this->db->group_end();
+    }
+
+    if (is_null($status) == FALSE) {
+      $this->db->where('is_visible', $status);
+    }
+
+    $this->db->group_start();
+    $this->db->group_start();
+    $this->db->where('open_date >=', $start);
+    $this->db->where('close_date <=', $end);
+    $this->db->group_end();
+
+    $this->db->or_group_start();
+    $this->db->where('close_date >=', $start);
+    $this->db->where('close_date <=', $end);
+    $this->db->group_end();
+
+    $this->db->or_group_start();
+    $this->db->where('open_date >=', $start);
+    $this->db->where('open_date <=', $end);
+    $this->db->group_end();
+
+    $this->db->or_group_start();
+    $this->db->where('open_date <=', $start);
+    $this->db->where('close_date >=', $end);
+    $this->db->group_end();
+
+    $this->db->group_end();
+    $this->db->from('vacancy');
+
+    return $this->db->get()->row()->val;
 
   }
 
@@ -111,8 +153,8 @@ class Vacancy_model extends CI_Model{
       'area_id'      => $area_id,
       'created_by'   => $by,
       'created_at'   => $at,
-      'modifed_by'   => $by,
-      'modifed_at'   => $at,
+      'modified_by'   => $by,
+      'modified_at'   => $at,
       'is_visible'   => $is_visible
     );
     $this->db->insert('vacancy', $data);
@@ -137,8 +179,8 @@ class Vacancy_model extends CI_Model{
       'requirement'  => $requirement,
       'benefit'      => $benefit,
       'area_id'      => $area_id,
-      'modifed_by'   => $by,
-      'modifed_at'   => $at,
+      'modified_by'   => $by,
+      'modified_at'   => $at,
       'is_visible'   => $is_visible
     );
     $this->db->where('id', $id);
@@ -150,8 +192,8 @@ class Vacancy_model extends CI_Model{
     $at   = date('Y-m-d H:i:s');
     $by   = 0; // TODO change to user_id from login session
     $data = array(
-      'modifed_by'   => $by,
-      'modifed_at'   => $at,
+      'modified_by'   => $by,
+      'modified_at'   => $at,
       'is_visible'   => $is_visible
     );
     $this->db->where('id', $id);
@@ -178,6 +220,49 @@ class Vacancy_model extends CI_Model{
     $this->db->from('vacancy_phase vp');
     $this->db->join('phase p', 'vp.phase_code = p.code', 'left');
     $this->db->order_by('vp.order_value');
-    return $this->db->get()->result;
+    return $this->db->get()->result();
+  }
+
+  public function addPhase($vacancy_id=0,$phase_code=0,$order=1)
+  {
+    $data = array(
+      'vacancy_id'  => $vacancy_id,
+      'phase_code'  => $phase_code,
+      'order_value' => $order,
+    );
+    $this->db->insert('vacancy_phase', $data);
+  }
+
+  public function countPhaseApp($vacancy_id=0,$phase_code=0)
+  {
+    $this->db->select('COUNT(ap.id) as val');
+
+    $this->db->where('ap.phase_code', $phase_code);
+    $this->db->where('ap.status_code', 0);
+    $this->db->from('application_phase ap');
+    $this->db->join('application a', 'ap.application_id = a.id', 'left');
+    $this->db->where('a.vacancy_id', $vacancy_id);
+
+    return $this->db->get()->row()->val;
+  }
+
+  public function countHired($vacancy_id=0)
+  {
+    $this->db->select('COUNT(a.id) as val');
+    $this->db->where('a.vacancy_id', $vacancy_id);
+    $this->db->where('a.status_code', 1);
+    $this->db->from('application a');
+    return $this->db->get()->row()->val;
+
+  }
+  public function countRejected($vacancy_id=0)
+  {
+    $this->db->select('COUNT(a.id) as val');
+    $this->db->where('a.vacancy_id', $vacancy_id);
+    $this->db->where('a.status_code', 2);
+    $this->db->from('application a');
+    return $this->db->get()->row()->val;
+
+
   }
 }

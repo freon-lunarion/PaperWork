@@ -11,6 +11,7 @@
     <?php
       echo link_tag('vendor/bootstrap/dist/css/bootstrap.css');
       echo link_tag('vendor/bootstrap/dist/css/bootstrap-theme.css');
+      echo link_tag('vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
       echo link_tag('vendor/font-awesome/css/font-awesome.css');
       echo link_tag('vendor/sweetalert/dist/sweetalert.css');
       echo link_tag('vendor/datatables/media/css/jquery.dataTables.min.css');
