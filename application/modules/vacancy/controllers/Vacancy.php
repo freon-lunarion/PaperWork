@@ -82,8 +82,6 @@ class Vacancy extends CI_Controller{
       if ($hiredNum >= $vac->qty) {
         $data['panelColor'] = 'panel-success';
       }
-
-
       $this->parser->parse('view_list', $data);
     }
 

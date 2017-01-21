@@ -46,8 +46,8 @@ class Vacancy_model extends CI_Model{
     $this->db->group_end();
     $this->db->from('vacancy');
     $this->db->limit($limit,$offset);
-    $this->db->order_by('close_date','desc');
-    $this->db->order_by('open_date','desc');
+    // $this->db->order_by('close_date','desc');
+    // $this->db->order_by('open_date','desc');
     $this->db->order_by('short_text');
   }
 
