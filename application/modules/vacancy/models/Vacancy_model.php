@@ -118,14 +118,14 @@ class Vacancy_model extends CI_Model{
 
   public function isPublish($id=0)
   {
-    $this->db->select('is_active');
+    $this->db->select('is_visible');
     $this->db->where('id', $id);
-    return $this->db->get('vacancy')->row()->is_active;
+    return $this->db->get('vacancy')->row()->is_visible;
   }
 
   public function haveApplicant($vacancy_id=0)
   {
-    $this->db->select('count(*)');
+    $this->db->select('count(*) as val');
     $this->db->where('vacancy_id', $vacancy_id);
     if ($this->db->get('application')->row()->val) {
       return true;

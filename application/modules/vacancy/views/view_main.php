@@ -193,11 +193,16 @@
 <script>
   $('#area-list').on('click', '.btn-publish', function(event) {
     event.preventDefault();
+
     page = $('.pagination>li.active>a').html();
+    id       = $(this).parent().parent().data('id');
+
+    confirmTx =  'Do you want to change status this vacancy';
+    noticeTx  =  'Vacancy Status changed';
 
     swal({
       title: "Are you sure?",
-      text: "Do you want to Publish this vacancy",
+      text: confirmTx,
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
@@ -210,13 +215,55 @@
     function(isConfirm){
       if (isConfirm) {
         $.ajax({
-          url: $(this).attr('href'),
+          url: baseUrl + 'vacancy/vacancy/processPublish',
           type: 'POST',
           dataType: 'json',
           data: {id: id}
         })
         .done(function(respond) {
-          swal("Success", "Vacancy Published", "success");
+          swal("Success", noticeTx, "success");
+          getList(page);
+        })
+        .fail(function() {
+
+        })
+        .always(function() {
+
+        });
+      } else {
+
+      }
+    });
+  });
+
+  $('#area-list').on('click', '.btn-remove', function(event) {
+    event.preventDefault();
+
+    page = $('.pagination>li.active>a').html();
+    id       = $(this).parent().parent().data('id');
+
+    swal({
+      title: "Are you sure?",
+      text: 'Do you want to remove this vacancy',
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      showLoaderOnConfirm: true,
+      closeOnConfirm: false,
+      closeOnCancel: true
+    },
+    function(isConfirm){
+      if (isConfirm) {
+        $.ajax({
+          url: baseUrl + 'vacancy/vacancy/processRemove',
+          type: 'POST',
+          dataType: 'json',
+          data: {id: id}
+        })
+        .done(function(respond) {
+          swal("Success", 'Vacancy Removed', "success");
           getList(page);
         })
         .fail(function() {

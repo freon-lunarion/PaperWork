@@ -15,11 +15,6 @@ class Vacancy extends CI_Controller{
     $this->load->view('view_main');
   }
 
-  public function test($value='')
-  {
-    echo decode_url($value);
-  }
-
   public function showList()
   {
     $this->load->library('parser' );
@@ -65,25 +60,23 @@ class Vacancy extends CI_Controller{
       }
       $hiredNum = $this->vacancy_model->countHired($vac->vacancy_id);
       $data = array(
-        'editUrl'  => site_url('vacancy/test/'.encode_url($vac->vacancy_id)),
-        'publishUrl'  => site_url('vacancy/test/'.encode_url($vac->vacancy_id)),
-        'vacCode'  => $vac->vacancy_code,
-        'vacTitle' => $vac->vacancy_title,
-        'phase'    => $phase,
-        'hiredNum'  => $hiredNum,
-        'rejectNum' => $this->vacancy_model->countRejected($vac->vacancy_id),
+        'vacId'      => encode_url($vac->vacancy_id),
+        'vacCode'    => $vac->vacancy_code,
+        'vacTitle'   => $vac->vacancy_title,
+        'phase'      => $phase,
+        'hiredNum'   => $hiredNum,
+        'rejectNum'  => $this->vacancy_model->countRejected($vac->vacancy_id),
       );
 
 
       if ($vac->is_visible) {
         $data['panelColor'] = 'panel-info';
-        $data['pubTool']    = 'Unpublish Vacancy';
-        $data['pubIcon']    = 'fa-eye';
+        $data['pubStatus']  = '<i class="fa fa-eye-slash"></i> Unpublish';
 
       } else {
         $data['panelColor'] = 'panel-default';
-        $data['pubTool']    = 'Publish Vacancy';
-        $data['pubIcon']    = 'fa-eye-slash';
+        $data['pubStatus']  = '<i class="fa fa-eye"></i> Publish';
+
       }
 
       if ($hiredNum >= $vac->qty) {
@@ -259,7 +252,7 @@ class Vacancy extends CI_Controller{
           $count++;
         }
         $this->vacancy_model->addPhase($vacancy_id,2,$count);
-        // redirect('vacancy');
+        redirect('vacancy');
       } else {
         // Show error messeage
 
@@ -268,15 +261,34 @@ class Vacancy extends CI_Controller{
 
   }
 
-  public function processEdit($id)
+  public function processEdit()
   {
 
 
   }
 
+  public function processPublish()
+  {
+    $id = decode_url($this->input->post('id'));
+    if($this->vacancy_model->isPublish($id)){
+      $this->vacancy_model->editStatus($id,0);
+    } else {
+      $this->vacancy_model->editStatus($id,1);
+    }
+    $respond = array('status'=>'OK','msg' => '');
+    echo json_encode($respond);
+  }
+
   public function processRemove()
   {
-    $id = $this->input->post('id');
+    $id = decode_url($this->input->post('id'));
+    if ($this->vacancy_model->haveApplicant($id) == FALSE) {
+      $this->vacancy_model->remove($id);
+      $respond = array('status'=>'OK','msg' => '');
+    } else {
+      $respond = array('status'=>'ERROR','msg' => '');
+    }
+    echo json_encode($respond);
 
   }
 }

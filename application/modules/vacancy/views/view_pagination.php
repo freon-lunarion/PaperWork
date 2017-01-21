@@ -6,7 +6,10 @@
       </a>
     </li>
     <?php
-      for ($i=1; $i <= $total ; $i++) {
+      $start = (($page - 2) > 0) ? ($page - 1) : 1;
+      $end   = (($page + 2) < $total ) ? $page + 2 : $total;
+
+      for ($i=$start ; $i <= $end; $i++) {
         if ($i == $page) {
           echo '<li class="page-num active"><a href="#">'.$i.'</a></li>';
         } else {
@@ -14,6 +17,16 @@
 
         }
       }
+      // if ($total <= 5) {
+      //   for ($i=1; $i <= $total ; $i++) {
+      //     if ($i == $page) {
+      //       echo '<li class="page-num active"><a href="#">'.$i.'</a></li>';
+      //     } else {
+      //       echo '<li class="page-num"><a href="#">'.$i.'</a></li>';
+      //
+      //     }
+      //   }
+      // }
     ?>
 
     <li class="page-arrow">
