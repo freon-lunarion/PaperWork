@@ -14,7 +14,7 @@
                 Action <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" data-id={vacId}>
-                <li><a href="#" class="btn-edit"><i class="fa fa-pencil"></i> Edit</a></li>
+                <li><a href="{editUrl}" class="btn-edit"><i class="fa fa-pencil"></i> Edit</a></li>
                 <li><a href="<?php echo site_url('vacancy/processPublish')?>" class="btn-publish">{pubStatus}</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="#" class="btn-remove"><i class="fa fa-trash"></i> Remove</a></li>

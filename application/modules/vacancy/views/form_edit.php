@@ -7,13 +7,13 @@
   <div class="row">
     <?php $this->load->view('sidebar');?>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-      <h1 class="page-header">Vacancy <small>Add</small></h1>
-      <?php echo form_open('vacancy/processAdd','class="form"')?>
+      <h1 class="page-header">Vacancy <small>Edit</small></h1>
+      <?php echo form_open('vacancy/processEdit','class="form"',$hidden)?>
       <div class="row">
         <div class="col-sm-4">
           <div class="form-group">
             <label for="">Vacancy Code</label>
-            <?php echo form_input('txt_code',''); ?>
+            <?php echo form_input('txt_code',$code); ?>
             <p class="help-block">2-10 Characters</p>
 
           </div>
@@ -21,7 +21,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="">Vacancy Name</label>
-            <?php echo form_input('txt_name',''); ?>
+            <?php echo form_input('txt_name',$name); ?>
             <p class="help-block">2-250 Characters</p>
           </div>
         </div>
@@ -29,7 +29,7 @@
         <div class="col-sm-2">
           <div class="form-group">
             <label for="">Quantity</label>
-            <?php echo form_number('nm_qty',1,'min=0'); ?>
+            <?php echo form_number('nm_qty',$qty,'min=0'); ?>
 
           </div>
         </div>
@@ -39,13 +39,13 @@
         <div class="col-sm-6 col-lg-3">
           <div class="form-group">
             <label for="">Area</label>
-            <?php echo form_dropdown('slc_area',$optArea,'');?>
+            <?php echo form_dropdown('slc_area',$optArea,$area);?>
           </div>
         </div>
         <div class="col-sm-6 col-lg-3">
           <div class="form-group">
             <label for="">Job Type</label>
-            <?php echo form_dropdown('slc_jobType',$optJobType,'');?>
+            <?php echo form_dropdown('slc_jobType',$optJobType,$typr);?>
             </select>
           </div>
         </div>
@@ -53,13 +53,13 @@
         <div class="col-sm-6 col-lg-3">
           <div class="form-group">
             <label for="">Job Function</label>
-            <?php echo form_dropdown('slc_jobFunc',$optJobFunc,'');?>
+            <?php echo form_dropdown('slc_jobFunc',$optJobFunc,$func);?>
           </div>
         </div>
         <div class="col-sm-6 col-lg-3">
           <div class="form-group">
             <label for="">Job Level</label>
-            <?php echo form_dropdown('slc_jobLevel',$optJobLevel,'');?>
+            <?php echo form_dropdown('slc_jobLevel',$optJobLevel,$level);?>
           </div>
         </div>
       </div>
@@ -68,81 +68,41 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="">Open Date</label>
-            <?php echo form_date('dt_open',''); ?>
+            <?php echo form_date('dt_open',$open); ?>
 
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
             <label for="">Close Date</label>
-            <!-- <input type="text" class="datepicker"/> -->
-            <?php echo form_date('dt_close',''); ?>
+            <?php echo form_date('dt_close',$close); ?>
           </div>
         </div>
       </div>
-
-
-
       <div class="form-group">
         <label for="">Description</label>
-        <?php echo form_textarea('txt_desc',''); ?>
+        <?php echo form_textarea('txt_desc',$desc); ?>
       </div>
 
       <div class="form-group">
         <label for="">Requirement</label>
         <p class="help-block">Optional</p>
-        <?php echo form_textarea('txt_req',''); ?>
+        <?php echo form_textarea('txt_req',$req); ?>
       </div>
 
       <div class="form-group">
         <label for="">Benefit</label>
         <p class="help-block">Optional</p>
-        <?php echo form_textarea('txt_benefit',''); ?>
+        <?php echo form_textarea('txt_benefit',$ben); ?>
       </div>
       <hr />
       <h2>Phase</h2>
       <table class="table table-hover">
         <thead>
           <th>Phase Name</th>
-          <th>Select</th>
           <th>Order</th>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              Screening CV
-            </td>
-            <td>
-              <input type="checkbox" value="" checked="checked" disabled>
-            </td>
-            <td>
-              Begin (1)
-            </td>
-          </tr >
-          <?php
-            $count = 2;
-            foreach ($phase as $row) {
-              echo '<tr>';
-              echo '<td>'.$row->title.'</td>';
-              echo '<td>'.form_checkbox('chk_phase[]',$row->code,'','class="chk_phase" id="chk_phase_'.$row->code.'"').'</td>';
-              echo '<td>'.form_number('nm_order_'.$row->code,$count,'min=2 max=98 class="form-control nm_order" data-code="'.$row->code.'"').'</td>';
-              echo '</tr>';
-              $count++;
-            }
-
-          ?>
-          <tr>
-            <td>
-              Sign Contract
-            </td>
-            <td>
-              <input type="checkbox" value="" checked="checked" disabled>
-            </td>
-            <td>
-              End (<?php echo $count; ?>)
-            </td>
-          </tr>
-
 
         </tbody>
       </table>
@@ -170,18 +130,3 @@
 
 <script type='text/javascript' src="<?php echo base_url(); ?>vendor/handlebars/handlebars.runtime.min.js"></script>
 <script type='text/javascript' src="<?php echo base_url(); ?>vendor/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.all.min.js"></script>
-
-<script>
-  $('textarea').wysihtml5();
-  $('.nm_order').change(function(event) {
-    /* Act on the event */
-    var val = $(this).val();
-    var code = $(this).data('code');
-    if (val > 1 ) {
-      $('#chk_phase_'+code).attr('checked', 'checked');
-    } else {
-      $('#chk_phase_'+code).removeAttr('checked');
-
-    }
-  });
-</script>

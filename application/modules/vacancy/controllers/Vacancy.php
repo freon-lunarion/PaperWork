@@ -61,6 +61,7 @@ class Vacancy extends CI_Controller{
       $hiredNum = $this->vacancy_model->countHired($vac->vacancy_id);
       $data = array(
         'vacId'      => encode_url($vac->vacancy_id),
+        'editUrl'    => site_url('vacancy/formEdit/'.encode_url($vac->vacancy_id)),
         'vacCode'    => $vac->vacancy_code,
         'vacTitle'   => $vac->vacancy_title,
         'phase'      => $phase,
