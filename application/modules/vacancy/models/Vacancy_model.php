@@ -251,36 +251,5 @@ class Vacancy_model extends CI_Model{
     $this->db->insert('vacancy_phase', $data);
   }
 
-  public function countPhaseApp($vacancy_id=0,$phase_code=0)
-  {
-    $this->db->select('COUNT(ap.id) as val');
-
-    $this->db->where('ap.phase_code', $phase_code);
-    $this->db->where('ap.status_code', 0);
-    $this->db->from('application_phase ap');
-    $this->db->join('application a', 'ap.application_id = a.id', 'left');
-    $this->db->where('a.vacancy_id', $vacancy_id);
-
-    return $this->db->get()->row()->val;
-  }
-
-  public function countHired($vacancy_id=0)
-  {
-    $this->db->select('COUNT(a.id) as val');
-    $this->db->where('a.vacancy_id', $vacancy_id);
-    $this->db->where('a.status_code', 1);
-    $this->db->from('application a');
-    return $this->db->get()->row()->val;
-
-  }
-  public function countRejected($vacancy_id=0)
-  {
-    $this->db->select('COUNT(a.id) as val');
-    $this->db->where('a.vacancy_id', $vacancy_id);
-    $this->db->where('a.status_code', 2);
-    $this->db->from('application a');
-    return $this->db->get()->row()->val;
-
-
-  }
+  
 }

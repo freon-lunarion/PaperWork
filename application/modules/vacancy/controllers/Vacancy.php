@@ -3,18 +3,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Vacancy extends CI_Controller{
 
-  private $limit = 3;
+  private $limit = 10;
 
   public function __construct()
   {
     parent::__construct();
-    $this->load->model(array('vacancy_model'));
+    $this->load->model(array('vacancy_model','applicant_model'));
 
   }
 
   function index()
   {
-    $this->load->view('view_main');
+    $this->load->view('job/view_main');
   }
 
   public function showList()
@@ -53,17 +53,17 @@ class Vacancy extends CI_Controller{
       $j = 0;
       foreach ($phaseLs as $pha) {
         // TODO count candidate on each phase
-        $appNum = $this->vacancy_model->countPhaseApp($vac->vacancy_id,$pha->phase_code);
+        $appNum = $this->applicant_model->countByPhase($vac->vacancy_id,$pha->phase_code);
         $phase[$j] = array(
           'phaseCode' => $pha->phase_code,
           'phaseName' => $pha->phase_name,
-          'selectUrl' => site_url('selection/applicant/'.encode_url($vac->vacancy_id).'/'.encode_url($pha->phase_code)),
+          'selectUrl' => site_url('vacancy/selection/phase/'.encode_url($vac->vacancy_id).'/'.encode_url($pha->phase_code)),
           'appNum'    => $appNum,
 
         );
         $j++;
       }
-      $hiredNum = $this->vacancy_model->countHired($vac->vacancy_id);
+      $hiredNum = $this->applicant_model->countHired($vac->vacancy_id);
       $data = array(
         'vacId'      => encode_url($vac->vacancy_id),
         'editUrl'    => site_url('vacancy/formEdit/'.encode_url($vac->vacancy_id)),
@@ -71,7 +71,7 @@ class Vacancy extends CI_Controller{
         'vacTitle'   => $vac->vacancy_title,
         'phase'      => $phase,
         'hiredNum'   => $hiredNum,
-        'rejectNum'  => $this->vacancy_model->countRejected($vac->vacancy_id),
+        'rejectNum'  => $this->applicant_model->countRejected($vac->vacancy_id),
       );
 
 
@@ -88,7 +88,7 @@ class Vacancy extends CI_Controller{
       if ($hiredNum >= $vac->qty) {
         $data['panelColor'] = 'panel-success';
       }
-      $this->parser->parse('view_list', $data);
+      $this->parser->parse('job/view_list', $data);
     }
 
 
@@ -124,7 +124,7 @@ class Vacancy extends CI_Controller{
       'page' => $page,
       'total' => $totalPage
     );
-    echo $this->load->view('view_pagination',$data);
+    echo $this->load->view('job/view_pagination',$data);
   }
 
   public function formAdd()
@@ -180,7 +180,7 @@ class Vacancy extends CI_Controller{
       'mode'        => 'Add',
 
     );
-    $this->load->view('form', $data);
+    $this->load->view('job/form', $data);
   }
 
   public function formEdit($en_id=0)
@@ -238,7 +238,7 @@ class Vacancy extends CI_Controller{
       'phase'       => $phase,
       'mode'        => 'Edit',
     );
-    $this->load->view('form', $data);
+    $this->load->view('job/form', $data);
 
   }
 
