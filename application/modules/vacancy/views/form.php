@@ -7,8 +7,8 @@
   <div class="row">
     <?php $this->load->view('sidebar');?>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-      <h1 class="page-header">Vacancy <small>Edit</small></h1>
-      <?php echo form_open('vacancy/processEdit','class="form"',$hidden)?>
+      <h1 class="page-header">Vacancy <small><?php echo $mode ?></small></h1>
+      <?php echo form_open($processUrl,'class="form"',$hidden)?>
       <div class="row">
         <div class="col-sm-4">
           <div class="form-group">
@@ -45,7 +45,7 @@
         <div class="col-sm-6 col-lg-3">
           <div class="form-group">
             <label for="">Job Type</label>
-            <?php echo form_dropdown('slc_jobType',$optJobType,$typr);?>
+            <?php echo form_dropdown('slc_jobType',$optJobType,$type);?>
             </select>
           </div>
         </div>
@@ -97,21 +97,20 @@
       </div>
       <hr />
       <h2>Phase</h2>
-      <table class="table table-hover">
-        <thead>
-          <th>Phase Name</th>
-          <th>Order</th>
-        </thead>
-        <tbody>
+      <?php
+        if ($mode  == 'Add') {
+          $this->load->view('form_phase');
+        } else {
+          $this->load->view('view_phase');
 
-        </tbody>
-      </table>
+        }
+      ?>
+
       <hr />
 
       <div class="row" >
         <div class="col-xs-12 col-md-6">
-          <a class="btn btn-default btn-lg btn-block">Cancel</a>
-
+          <?php echo anchor('vacancy','Cancel','class="btn btn-default btn-lg btn-block"') ?>
         </div>
         <div class="col-xs-12 col-md-6">
           <button type="submit" class="btn btn-lg btn-primary btn-block">Save</button>
@@ -130,3 +129,17 @@
 
 <script type='text/javascript' src="<?php echo base_url(); ?>vendor/handlebars/handlebars.runtime.min.js"></script>
 <script type='text/javascript' src="<?php echo base_url(); ?>vendor/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.all.min.js"></script>
+<script>
+  $('textarea').wysihtml5();
+  $('.nm_order').change(function(event) {
+    /* Act on the event */
+    var val = $(this).val();
+    var code = $(this).data('code');
+    if (val > 1 ) {
+      $('#chk_phase_'+code).attr('checked', 'checked');
+    } else {
+      $('#chk_phase_'+code).removeAttr('checked');
+
+    }
+  });
+</script>

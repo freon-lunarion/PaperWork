@@ -105,7 +105,7 @@
         </div>
 
         <div class="col-xs-1 col-md-6 col-lg-6 ">
-          <button class="btn btn-default pull-right">Back to Top</button>
+          <button class="btn btn-default btn-backToTop pull-right">Back to Top</button>
 
         </div>
       </div>
@@ -191,6 +191,15 @@
   });
 </script>
 <script>
+  $('.btn-backToTop').click(function(event) {
+    /* Act on the event */
+    event.preventDefault();
+    // alert('AA');
+    $('body,html').animate({
+				scrollTop: 0
+			}, 500);
+		return false;
+  });
   $('#area-list').on('click', '.btn-publish', function(event) {
     event.preventDefault();
 

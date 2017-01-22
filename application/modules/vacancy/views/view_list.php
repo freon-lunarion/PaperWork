@@ -14,6 +14,10 @@
                 Action <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" data-id={vacId}>
+                <!-- <li><a href="{editUrl}" class="btn-preview"><i class="fa fa-file-text"></i> Preview</a></li> -->
+                <!-- <li><a href="{editUrl}" class="btn-share"><i class="fa fa-share"></i> Share Link</a></li> -->
+                <!-- <li role="separator" class="divider"></li> -->
+
                 <li><a href="{editUrl}" class="btn-edit"><i class="fa fa-pencil"></i> Edit</a></li>
                 <li><a href="<?php echo site_url('vacancy/processPublish')?>" class="btn-publish">{pubStatus}</a></li>
                 <li role="separator" class="divider"></li>

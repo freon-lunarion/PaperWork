@@ -111,9 +111,28 @@ class Vacancy_model extends CI_Model{
 
   public function getRow($id=0)
   {
-    $this->db->select('*');
+    $this->db->select('id as vacancy_id');
+    $this->db->select('short_text as vacancy_code');
+    $this->db->select('long_text as vacancy_title');
+    // $this->db->select('is_visible');
+    $this->db->select('qty');
+    $this->db->select('close_date');
+    $this->db->select('open_date');
+    $this->db->select('description');
+    $this->db->select('benefit');
+    $this->db->select('requirement');
+    $this->db->select('area_id');
+    $this->db->select('job_type');
+    $this->db->select('job_level');
+    $this->db->select('job_function');
+    $this->db->select('created_by');
+    $this->db->select('created_at');
+    $this->db->select('modified_by');
+    $this->db->select('modified_at');
+
     $this->db->from('vacancy');
     $this->db->where('id',$id);
+    return $this->db->get()->row();
   }
 
   public function isPublish($id=0)

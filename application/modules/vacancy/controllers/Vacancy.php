@@ -153,9 +153,24 @@ class Vacancy extends CI_Controller{
       'optJobFunc'  => $optJobFunc,
       'optArea'     => $optArea,
       'phase'       => $phase,
-      'id'          => 0,
+      'hidden'      => array(),
+      'code'        => '',
+      'name'        => '',
+      'qty'         => '',
+      'area'        => '',
+      'type'        => '',
+      'func'        => '',
+      'level'       => '',
+      'open'        => '',
+      'close'       => '',
+      'desc'        => '',
+      'req'         => '',
+      'ben'         => '',
+      'processUrl'  => 'vacancy/processAdd',
+      'mode'        => 'Add',
+
     );
-    $this->load->view('form_add', $data);
+  $this->load->view('form', $data);
   }
 
   public function formEdit($en_id=0)
@@ -188,14 +203,32 @@ class Vacancy extends CI_Controller{
       $optJobFunc[$row->id] = $row->title;
     }
 
+    $old = $this->vacancy_model->getRow($id);
+    $phase = $this->vacancy_model->getPhaseLs($id);
+
     $data =array(
       'optJobType'  => $optJobType,
       'optJobLevel' => $optJobLevel,
       'optJobFunc'  => $optJobFunc,
       'optArea'     => $optArea,
-      'id'          => $id,
+      'hidden'      => array('id' => $id),
+      'code'        => $old->vacancy_code,
+      'name'        => $old->vacancy_title,
+      'qty'         => $old->qty,
+      'area'        => $old->area_id,
+      'type'        => $old->job_type,
+      'func'        => $old->job_function,
+      'level'       => $old->job_level,
+      'open'        => $old->open_date,
+      'close'       => $old->close_date,
+      'desc'        => $old->description,
+      'req'         => $old->requirement,
+      'ben'         => $old->benefit,
+      'processUrl'  => 'vacancy/processEdit',
+      'phase'       => $phase,
+      'mode'        => 'Edit',
     );
-    $this->load->view('form_edit', $data);
+    $this->load->view('form', $data);
 
   }
 
