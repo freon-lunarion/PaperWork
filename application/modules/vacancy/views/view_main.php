@@ -59,10 +59,6 @@
                 </a>
               </li>
               <li class="page-num active"><a href="#">1</a></li>
-              <li class="page-num"><a href="#">2</a></li>
-              <li class="page-num"><a href="#">3</a></li>
-              <li class="page-num"><a href="#">4</a></li>
-              <li class="page-num"><a href="#">5</a></li>
               <li class="page-next">
                 <a href="#" aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>
@@ -171,16 +167,17 @@
   getList(1);
   getPage(1);
 
-  $('.pagination>li.page-num>a').click(function(event) {
-    /* Act on the event */
 
-    $('.pagination>li.page-num').attr('class', 'page-num');
-    $(this).parent().attr('class', 'page-num active');
-  });
-
-  $('.pagination>li.page-next>a').click(function(event) {
+</script>
+<script>
+  $('#txt_keyword').focus(function(event) {
     /* Act on the event */
-    page = $('.pagination>li.active>a').html();
+    $(this).keypress(function(e) {
+      if(e.which == 13) {
+        getList(1);
+        getPage(1);
+      };
+    });
 
   });
 
@@ -189,8 +186,7 @@
     getList(1);
     getPage(1);
   });
-</script>
-<script>
+
   $('.btn-backToTop').click(function(event) {
     /* Act on the event */
     event.preventDefault();
@@ -200,6 +196,60 @@
 			}, 500);
 		return false;
   });
+</script>
+<script>
+  $('.area-page').on('click', '.pagination>li.page-first>a', function(event) {
+    event.preventDefault();
+    /* Act on the event */
+    getList(1);
+    getPage(1);
+  });
+  $('.area-page').on('click', '.pagination>li.page-last>a', function(event) {
+    event.preventDefault();
+    /* Act on the event */
+    page = $(this).data('last');
+    getList(page);
+    getPage(page);
+  });
+  $('.area-page').on('click', '.pagination>li.page-num>a', function(event) {
+    event.preventDefault();
+    /* Act on the event */
+    page = $(this).html();
+    getList(page);
+    getPage(page);
+  });
+
+  $('.area-page').on('click', '.pagination>li.page-next>a', function(event) {
+    event.preventDefault();
+    /* Act on the event */
+    page = parseInt($('.pagination>li.active>a').html());
+    last = parseInt($('.pagination>li.page-last>a').data('last'))
+
+    if ((page + 1) > last) {
+
+      page = last;
+    } else {
+      page = page+1;
+    }
+    getList(page);
+    getPage(page);
+  });
+
+  $('.area-page').on('click', '.pagination>li.page-prev>a', function(event) {
+    event.preventDefault();
+    /* Act on the event */
+    page = parseInt($('.pagination>li.active>a').html());
+
+    if ((page - 1) < 1) {
+      page = 1;
+    } else {
+      page = page - 1;
+    }
+    getList(page );
+    getPage(page );
+  });
+
+
   $('#area-list').on('click', '.btn-publish', function(event) {
     event.preventDefault();
 
@@ -274,6 +324,7 @@
         .done(function(respond) {
           swal("Success", 'Vacancy Removed', "success");
           getList(page);
+          getPage(page);
         })
         .fail(function() {
 

@@ -3,6 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Vacancy extends CI_Controller{
 
+  private $limit = 3;
+
   public function __construct()
   {
     parent::__construct();
@@ -24,8 +26,11 @@ class Vacancy extends CI_Controller{
     $page      = $this->input->post('page');
     $start     = $this->input->post('start');
     $end       = $this->input->post('end');
-    $limit     = 10;
-    $offset    = ($page - 1) * $limit;
+    if ($page < 1) {
+      $page = 1;
+    }
+
+    $offset    = ($page - 1) * $this->limit;
     switch ($status) {
       case 'publish':
         $status = TRUE;
@@ -37,7 +42,7 @@ class Vacancy extends CI_Controller{
         $status = NULL;
         break;
     }
-    $vacancyLs = $this->vacancy_model->getList($start,$end,$keyword,$status,$limit,$offset);
+    $vacancyLs = $this->vacancy_model->getList($start,$end,$keyword,$status,$this->limit,$offset);
     // var_dump($vacancyLs);
     $respond = array();
     $list    = array();
@@ -96,7 +101,7 @@ class Vacancy extends CI_Controller{
     $page      = $this->input->post('page');
     $start     = $this->input->post('start');
     $end       = $this->input->post('end');
-    $limit     = 10;
+
     switch ($status) {
       case 'publish':
         $status = TRUE;
@@ -109,7 +114,12 @@ class Vacancy extends CI_Controller{
         break;
     }
     $totalRec = $this->vacancy_model->countFiltered($start, $end, $keyword,$status);
-    $totalPage = floor($totalRec/$limit)+1;
+    $totalPage = ceil($totalRec/$this->limit);
+    if ($page < 1) {
+      $page = 1;
+    } else if ($page > $totalPage) {
+      $page = $totalPage;
+    }
     $data = array(
       'page' => $page,
       'total' => $totalPage
@@ -170,7 +180,7 @@ class Vacancy extends CI_Controller{
       'mode'        => 'Add',
 
     );
-  $this->load->view('form', $data);
+    $this->load->view('form', $data);
   }
 
   public function formEdit($en_id=0)
@@ -211,7 +221,7 @@ class Vacancy extends CI_Controller{
       'optJobLevel' => $optJobLevel,
       'optJobFunc'  => $optJobFunc,
       'optArea'     => $optArea,
-      'hidden'      => array('id' => $id),
+      'hidden'      => array('id' => $en_id),
       'code'        => $old->vacancy_code,
       'name'        => $old->vacancy_title,
       'qty'         => $old->qty,
@@ -283,6 +293,9 @@ class Vacancy extends CI_Controller{
 
           $count++;
         }
+        if ($order >= $count) {
+          $count = $order+1;
+        }
         $this->vacancy_model->addPhase($vacancy_id,2,$count);
         redirect('vacancy');
       } else {
@@ -295,7 +308,46 @@ class Vacancy extends CI_Controller{
 
   public function processEdit()
   {
+    $this->load->library('form_validation');
+    $this->form_validation->set_rules('txt_code', 'Vacancy Code', 'required|min_length[2]|max_length[10]|alpha_dash');
+    $this->form_validation->set_rules('txt_name', 'Vacancy Name', 'required|min_length[2]|max_length[250]|alpha_numeric_spaces');
+    $this->form_validation->set_rules('nm_qty', 'Quantity', 'required|numeric');
+    $this->form_validation->set_rules('slc_area', 'Area', 'required');
+    $this->form_validation->set_rules('slc_jobType', 'Job Type', 'required');
+    $this->form_validation->set_rules('slc_jobFunc', 'Job Function', 'required');
+    $this->form_validation->set_rules('slc_jobLevel', 'Job Level', 'required');
+    $this->form_validation->set_rules('dt_open', 'Open Date', 'required');
+    $this->form_validation->set_rules('dt_close', 'Close Date', 'required');
+    if ($this->form_validation->run() == FALSE) {
+      // Show error messeage
+    } else {
+      // TODO Save and redirect to list
+      // Add Header
+      $id    = decode_url($this->input->post('id'));
+      $code  = $this->input->post('txt_code');
+      $name  = $this->input->post('txt_name');
+      $qty   = $this->input->post('nm_qty');
+      $area  = $this->input->post('slc_area');
+      $type  = $this->input->post('slc_jobType');
+      $level = $this->input->post('slc_jobLevel');
+      $func  = $this->input->post('slc_jobFunc');
+      $open  = $this->input->post('dt_open');
+      $close = $this->input->post('dt_close');
+      $desc  = $this->input->post('txt_desc');
+      $req   = $this->input->post('txt_req');
+      $ben   = $this->input->post('txt_benefit');
 
+      $this->vacancy_model->edit( $id,
+        $code,$name,
+        $open,$close,
+        $qty,$type,
+        $func,$level,
+        $desc,$req,
+        $ben,$area
+      );
+
+      redirect('vacancy');
+    }
 
   }
 

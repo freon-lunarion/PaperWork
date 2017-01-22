@@ -181,7 +181,7 @@ class Vacancy_model extends CI_Model{
     return $this->db->insert_id();
   }
 
-  public function edit($id=0,$short_text='',$long_text='',$open_date='',$close_date='',$qty=1,$job_type=0,$job_function=0,$job_level=0,$description='',$requirement='',$benefit='',$is_visible=FALSE,$area_id=1)
+  public function edit($id=0,$short_text='',$long_text='',$open_date='',$close_date='',$qty=1,$job_type=0,$job_function=0,$job_level=0,$description='',$requirement='',$benefit='',$area_id=1)
   {
     $at   = date('Y-m-d H:i:s');
     $by   = 0; // TODO change to user_id from login session
@@ -200,7 +200,6 @@ class Vacancy_model extends CI_Model{
       'area_id'      => $area_id,
       'modified_by'   => $by,
       'modified_at'   => $at,
-      'is_visible'   => $is_visible
     );
     $this->db->where('id', $id);
     $this->db->update('vacancy', $data);
