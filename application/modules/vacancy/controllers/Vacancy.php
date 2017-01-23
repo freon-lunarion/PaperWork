@@ -155,7 +155,7 @@ class Vacancy extends CI_Controller{
       $optJobFunc[$row->id] = $row->title;
     }
 
-    $phase = $this->master_model->getPhase();
+    $phase = $this->master_model->getPhaseLs();
 
     $data =array(
       'optJobType'  => $optJobType,

@@ -3,6 +3,47 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Applicant_model extends CI_Model{
 
+  private function _getGeneral($vacancy_id=0,$phase_code=0,$status=0)
+  {
+    $this->db->select('a.candidate_id');
+    $this->db->select('a.created_at');
+    $this->db->select('a.modified_at');
+    $this->db->select('c.fullname');
+    $this->db->select('rg.title as gender');
+    $this->db->from('application_phase ap');
+    $this->db->join('application a', 'ap.application_id = a.id', 'left');
+    $this->db->join('ref_gender rg', 'c.gender_code = rg.id', 'left');
+    $this->db->join('candidate c', 'a.candidate_id = c.id', 'left');
+    $this->db->where('ap.status_code', $status);
+
+  }
+
+  public function getByPhaseLs($vacancy_id=0,$phase_code=0,$status=0,$limit=20,$offset=0,$extra = array())
+  {
+    $this->_getGeneral($vacancy_id,$phase_code,$status);
+    if ($phase_code == 1) {
+      $this->db->select("DATEDIFF(STR_TO_DATE(a.created_at, '%d-%m-%Y'), STR_TO_DATE(c.birthday, '%d-%m-%Y'))/365 AS age");
+      $this->db->select('rg.title as gender');
+      $this->db->join('ref_gender rg', 'c.gender_code = rg.id', 'left');
+      if (isset($extra['ageMin']) && isset($extra['ageMax'])) {
+        $this->db->where('c.gender', $extra['gender']);
+        $this->db->where("DATEDIFF(STR_TO_DATE(a.created_at, '%d-%m-%Y'), STR_TO_DATE(c.birthday, '%d-%m-%Y'))/365 >= ".$extra['ageMin'] );
+        $this->db->where("DATEDIFF(STR_TO_DATE(a.created_at, '%d-%m-%Y'), STR_TO_DATE(c.birthday, '%d-%m-%Y'))/365 <= ".$extra['ageMax'] );
+      }
+
+      if (isset($extra['gender'])) {
+        $this->db->where('c.gender', $extra['gender']);
+      }
+
+      if (isset($extra['expMin'])) {
+        $this->db->where('c.gender', $extra['gender']);
+      }
+    }
+
+    $this->db->limit($limit,$offset);
+
+  }
+
   public function getLsByPhase($vacancy_id=0,$phase_code=0,$status=0,$limit=20,$offset=0)
   {
     $this->db->select('a.candidate_id');
@@ -16,7 +57,10 @@ class Applicant_model extends CI_Model{
     $this->db->join('ref_gender rg', 'c.gender_code = rg.id', 'left');
     $this->db->where('ap.status_code', $status);
     $this->db->limit($limit,$offset);
+    return $this->db->get()->result();
   }
+
+
 
   public function countByPhase($vacancy_id=0,$phase_code=0)
   {

@@ -44,12 +44,29 @@ class Master_model extends CI_Model{
     // }
   }
 
-  public function getPhase()
+  public function getPhaseLs()
   {
     $this->db->select('code, title, is_mandatory, has_schedule');
     $this->db->where('is_begin', 0);
     $this->db->where('is_end', 0);
     return $this->db->get('phase')->result();
+
+  }
+
+  public function getPhaseRow($phase_code)
+  {
+    $this->db->select('code, title, is_mandatory, has_schedule');
+    $this->db->where('code', $phase_code);
+    return $this->db->get('phase')->row();
+
+  }
+
+  public function getEduLevelLs()
+  {
+    $this->db->select('id,title');
+    $this->db->from('education_level');
+    $this->db->order_by('id','desc');
+    return $this->db->get()->result();
 
   }
 
