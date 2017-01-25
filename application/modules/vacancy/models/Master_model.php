@@ -63,7 +63,7 @@ class Master_model extends CI_Model{
 
   public function getEduLevelLs()
   {
-    $this->db->select('id,title');
+    $this->db->select('score,title');
     $this->db->from('education_level');
     $this->db->order_by('score','desc');
     return $this->db->get()->result();

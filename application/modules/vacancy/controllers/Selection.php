@@ -155,23 +155,21 @@ class Selection extends CI_Controller{
     $vacId  = decode_url($this->input->post('vacId'));
 
     // criteria
-    // $eduMin = $this->input->post('eduMin');
-    $extra['ageMin'] = $this->input->post('ageMin');
-    $extra['ageMax'] = $this->input->post('ageMax');
-    $gender = $this->input->post('gender');
-    if ($gender == 'male' ) {
-      $extra['gender'] = 1;
+    $criteria['eduMin'] = $this->input->post('eduMin');
+    $criteria['expMin'] = $this->input->post('expMin');
+    $criteria['ageMin'] = $this->input->post('ageMin');
+    $criteria['ageMax'] = $this->input->post('ageMax');
+    $criteria['salMin'] = $this->input->post('salMin');
+    $criteria['salMax'] = $this->input->post('salMax');
+    $criteria['gender'] = $this->input->post('gender');
 
-    } elseif ($gender == 'female') {
-      $extra['gender'] = 0;
-    }
 
     $page   = $this->input->post('page');
     $offset = ($page - 1) * $this->limit;
-    $ls     = $this->applicant_model->getByPhaseLs($vacId, 1,0,$this->limit,$offset,$extra);
+    $ls     = $this->applicant_model->getFirstPhaseLs($vacId,$criteria,$this->limit,$offset);
     foreach ($ls as $row) {
-      $edu = $this->candidate_model->getLastEdu($row->candidate_id);
-      $exp = $this->candidate_model->getLastExp($row->candidate_id);
+      // $edu = $this->candidate_model->getLastEdu($row->candidate_id);
+      // $exp = $this->candidate_model->getLastExp($row->candidate_id);
     }
   }
 

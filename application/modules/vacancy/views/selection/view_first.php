@@ -48,17 +48,17 @@
         <div class="form-group">
           <label for="">Min. Edu</label>
           <select class="form-control" id="slc_edu" name="slc_status">
-            <option value="">none</option>
+            <option value="0">none</option>
 
             {optEdu}
-              <option value="{id}">{title}</option>
+              <option value="{score}">{title}</option>
             {/optEdu}
 
           </select>
         </div>
         <div class="form-group">
           <label for="">Min. Exp</label>
-          <?php echo form_number('nm_expin','0','style="width:80px"'); ?>
+          <?php echo form_number('nm_expmin','0','style="width:80px"'); ?>
         </div>
         <div class="form-group">
           <label for="">Min. age</label>
@@ -69,6 +69,14 @@
           <?php echo form_number('nm_agemax','99','style="width:80px"'); ?>
         </div>
         <div class="form-group">
+          <label for="">Min. Salary</label>
+          <?php echo form_number('nm_salarymin','0','step="100000" min=0'); ?>
+        </div>
+        <div class="form-group">
+          <label for="">Max. Salary</label>
+          <?php echo form_number('nm_salarymax','99900000','step="100000" min=0'); ?>
+        </div>
+        <div class="form-group">
           <label for="">Gender</label>
           <select class="form-control" id="slc_gender" name="slc_status">
               <option value="all">All</option>
@@ -76,23 +84,23 @@
               <option value="female">Female</option>
           </select>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label for="">Criteria</label>
           <select class="form-control" id="slc_field" name="slc_status">
               <option value="eduInst">Education Institution</option>
               <option value="expComp">Company Name</option>
               <option value="expJob">Job Name</option>
           </select>
-        </div>
-        <div class="form-group">
+        </div> -->
+        <!-- <div class="form-group">
           <label for="">Keyword</label>
           <div class="input-group">
             <input type="text" name="txt_keyword" id="txt_keyword" class="form-control" placeholder="Search for criteria">
             <span class="input-group-btn">
               <button class="btn btn-default" id="btn-search" type="button" title="search"><i class="fa fa-search"></i></button>
             </span>
-          </div><!-- /input-group -->
-        </div>
+          </div>
+        </div> -->
       </form>
       <div class="row" >
         <div class="col-xs-11 col-md-6 col-lg-6 area-page">
@@ -125,8 +133,6 @@
               <tr>
                 <th>No.</th>
                 <th>Fullname</th>
-                <th>Gender</th>
-                <th>Age</th>
                 <th>Exp</th>
                 <th>Edu</th>
                 <th>Action</th>
