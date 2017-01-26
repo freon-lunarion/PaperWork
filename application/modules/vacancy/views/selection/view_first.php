@@ -70,11 +70,11 @@
         </div>
         <div class="form-group">
           <label for="">Min. Salary</label>
-          <?php echo form_number('nm_salarymin','0','step="100000" min=0'); ?>
+          <?php echo form_number('nm_salarymin','0',' min=0'); ?>
         </div>
         <div class="form-group">
           <label for="">Max. Salary</label>
-          <?php echo form_number('nm_salarymax','99900000','step="100000" min=0'); ?>
+          <?php echo form_number('nm_salarymax','99900000',' min=0'); ?>
         </div>
         <div class="form-group">
           <label for="">Gender</label>
@@ -101,6 +101,8 @@
             </span>
           </div>
         </div> -->
+        <button class="btn btn-default" id="btn-search" type="button" title="Search"><i class="fa fa-search"></i> Search</button>
+
       </form>
       <div class="row" >
         <div class="col-xs-11 col-md-6 col-lg-6 area-page">
@@ -179,46 +181,25 @@
   echo $this->load->view('template/bot');
 ?>
 <script>
-  // function getPage(page) {
-  //   $.ajax({
-  //     url: baseUrl+'vacancy/vacancy/showPage',
-  //     type: 'POST',
-  //     dataType: 'html',
-  //     data: {
-  //       keyword: $('#txt_keyword').val(),
-  //       status: $('#slc_status').val(),
-  //       start: $('#dt_start').val(),
-  //       end: $('#dt_end').val(),
-  //       page:page,
-  //     }
-  //   })
-  //   .done(function(respond) {
-  //     $('.area-page').html(respond);
-  //     console.log("success");
-  //   })
-  //   .fail(function() {
-  //     console.log("error");
-  //   })
-  //   .always(function() {
-  //     console.log("complete");
-  //   });
-  // }
-  //
+  getList(1);
   function getList(page) {
     $.ajax({
       url: baseUrl+'vacancy/selection/showCvList',
       type: 'POST',
       dataType: 'html',
       data: {
-        keyword: $('#txt_keyword').val(),
-        status: $('#slc_status').val(),
-        start: $('#dt_start').val(),
-        end: $('#dt_end').val(),
+        eduMin:0,
+        expMin:0,
+        ageMin:0,
+        ageMax:99,
+        salMin:0,
+        salMax:99990000,
+        gender:'all',
         page:page,
       }
     })
     .done(function(respond) {
-      $('#area-list').html(respond);
+      // $('#area-list').html(respond);
 
       console.log("success");
     })

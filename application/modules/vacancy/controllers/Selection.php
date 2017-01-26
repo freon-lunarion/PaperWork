@@ -163,14 +163,27 @@ class Selection extends CI_Controller{
     $criteria['salMax'] = $this->input->post('salMax');
     $criteria['gender'] = $this->input->post('gender');
 
-
     $page   = $this->input->post('page');
     $offset = ($page - 1) * $this->limit;
-    $ls     = $this->applicant_model->getFirstPhaseLs($vacId,$criteria,$this->limit,$offset);
+    $ls     = $this->applicant_model->getByFirstPhaseList($vacId,$criteria,$this->limit,$offset);
+    $data = array();
+    $no = 1 + $offset;
     foreach ($ls as $row) {
-      // $edu = $this->candidate_model->getLastEdu($row->candidate_id);
-      // $exp = $this->candidate_model->getLastExp($row->candidate_id);
+      $edu = $this->candidate_model->getEduLast($row->candidate_id);
+      $exp = $this->candidate_model->getExpLast($row->candidate_id);
+
+      $r['no']   = $no;
+      $r['id']   = $row->candidate_id;
+      $r['name'] = $row->fullname;
+      $r['edu']  = $edu->institution .' - '. $edu->major;
+      $r['exp']  = $exp->job_name .' ('. date('Y M',$exp->begin) .'-'.date('Y M',$exp->end) .')';
+      $data[] = $r;
     }
+    $output = array(
+      'data'      => $data,
+      'totalData' => $this->applicant_model->countByFirstPhase($vacId,$criteria)
+    );
+    echo json_encode($output);
   }
 
   public function showApplicantList()
